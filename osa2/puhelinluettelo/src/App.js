@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Name from './components/Name'
 
+//TODO ->2.7 asti
 const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas', id: 1}])
   const [newName, setNewName] = useState('')
@@ -9,7 +10,6 @@ const App = () => {
     event.preventDefault()
     const nameObject = {
       name: newName,
-      date: new Date().toISOString(),
       id: persons.length + 1,
     }
 
@@ -21,7 +21,7 @@ const App = () => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
-
+  window.alert('xd')
   return (
     <div>
       <h2>Phonebook</h2>
@@ -43,11 +43,11 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <ul>
+      <div>
         {persons.map(name => 
           <Name key={name.id} name={name} />
         )}
-      </ul>
+      </div>
     </div>
   )
 }
