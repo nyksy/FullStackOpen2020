@@ -4,7 +4,7 @@ import Filter from './components/Filter'
 import axios from 'axios'
 
 
-//tehty 2.11 asti
+//todo 2.15 ->
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
