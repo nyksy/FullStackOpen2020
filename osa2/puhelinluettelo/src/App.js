@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import Name from './components/Name'
+import NameRenderer from './components/NameRenderer'
+import Filter from './components/Filter'
 
-//TODO tehty 2.9 asti
+//TODO tehty ? asti
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456' },
@@ -11,6 +12,7 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [newFilter, setNewFilter] = useState('')
 
   const addName = (event) => {
     event.preventDefault()
@@ -45,9 +47,16 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    console.log(event.target.value)
+    setNewFilter(event.target.value)
+  }
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Filter onChange={handleFilterChange} />
+      <h2>Add a new</h2>
       <form onSubmit={addName}>
         <div>
           name: <input
@@ -57,8 +66,8 @@ const App = () => {
         </div>
         <div>
           number: <input
-          value={newNumber}
-          onChange={handleNumberChange}
+            value={newNumber}
+            onChange={handleNumberChange}
           />
         </div>
         <div>
@@ -66,11 +75,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <div>
-        {persons.map((name, number) =>
-          <Name key={name.name} name={name} number={number} />
-        )}
-      </div>
+      <NameRenderer persons={persons} filter={newFilter} />
     </div>
   )
 }
