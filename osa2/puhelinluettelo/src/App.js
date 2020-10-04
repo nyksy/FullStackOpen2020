@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react'
 import NameRenderer from './components/NameRenderer'
 import Filter from './components/Filter'
 import axios from 'axios'
+import nameService from './services/names'
 
 
-//todo 2.15 ->
+
+//todo 2.17 ->
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
 
-  useEffect(() => {
+  useEffect(() => { // Datan hakeminen
     console.log('effect')
     axios
       .get('http://localhost:3001/persons')
@@ -23,29 +25,48 @@ const App = () => {
 
   console.log('render', persons.length, 'notes')
 
-  const addName = (event) => {
+  const addName = (event) => { // Nimen ja puhelinnumeron lisääminen palvelimelle
     event.preventDefault()
-
     console.table(persons)
-
     const nameObject = {
+      id: newName,
       name: newName,
       number: newNumber,
     }
 
-    var contains = false
+    var contains = false //testataan löytyykö nimeä jo tiedoista
     for (let i = 0; i < persons.length; i++)
       if (persons[i].name === newName) {
         contains = true
         window.alert(`${newName} is already in the phonebook`)
       }
     if (contains === false)
-      setPersons(persons.concat(nameObject))
+      nameService
+        .create(nameObject)
+        .then(returnedName => {
+          setPersons(persons.concat(returnedName))
+        })
     setNewName('')
     setNewNumber('')
     contains = false
   }
 
+  const toggleDeletionOf = (id) => { // Poistofunktion kutsu
+    const name = persons.find(n => n.name === id)
+
+    if (window.confirm(`Delete ${name.name}?`))
+      nameService
+        .remove(id)
+        .then(setPersons(persons.filter(n => n.name !== id)))
+        .catch(error => {
+          alert(
+            `the name '${name.name}' was already deleted from server`
+          )
+          setPersons(persons.filter(n => n.name !== id))
+        })
+  }
+
+  //eventhandlerit nimelle, numerolle ja filtterille
   const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
@@ -84,7 +105,8 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <NameRenderer persons={persons} filter={newFilter} />
+      <NameRenderer persons={persons} filter={newFilter}
+        toggleDeletionOf={toggleDeletionOf} />
     </div>
   )
 }
