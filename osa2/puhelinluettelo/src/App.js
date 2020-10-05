@@ -3,15 +3,18 @@ import NameRenderer from './components/NameRenderer'
 import Filter from './components/Filter'
 import axios from 'axios'
 import nameService from './services/names'
+import Notification from './components/Notification'
 
 
 
-//todo 2.17 ->
+//2.19 tehty
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+
 
   useEffect(() => { // Datan hakeminen
     console.log('effect')
@@ -40,12 +43,19 @@ const App = () => {
         contains = true
         window.alert(`${newName} is already in the phonebook`)
       }
-    if (contains === false)
+    if (contains === false) {
       nameService
         .create(nameObject)
         .then(returnedName => {
           setPersons(persons.concat(returnedName))
         })
+        setErrorMessage(
+          `${newName} added to the server.`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+    }
     setNewName('')
     setNewNumber('')
     contains = false
@@ -85,6 +95,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={errorMessage} />
       <Filter onChange={handleFilterChange} />
       <h2>Add a new</h2>
       <form onSubmit={addName}>
