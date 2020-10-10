@@ -1,2 +1,2 @@
 # osa3
-tämän osion tehtävät löytyvät omasta repositoriostaan puhelinluettelo-backend
+tämän osion tehtävät löytyvät myös omasta repositoriostaan puhelinluettelo-backend: 
