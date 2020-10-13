@@ -1,6 +1,9 @@
-# osa3
-tämän osion tehtävät löytyvät myös omasta repositoriostaan puhelinluettelo-backend: 
-https://github.com/nyksy/puhelinluettelo-backend
+# puhelinluettelo-backend
 
-linkki sivulle:
+Linkki sivulle:
 https://morning-retreat-08085.herokuapp.com/
+
+Linkki full stack-sivulle:
+https://frozen-thicket-17628.herokuapp.com/
+
+Löytyy myös omasta repositoriostaan:
