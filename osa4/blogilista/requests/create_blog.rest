@@ -1,9 +1,11 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im55a2FuZW4iLCJpZCI6IjVmOTA2OTgyNTdjYmVkN2MyOGFjMTFiNSIsImlhdCI6MTYwMzMwNTk3OH0.Onmzg5inKpDCiGaCrjhrw8vuCQUetjpXFas5GMIoCMg
 
 {
-    "title": "Hello",
-    "author": "Juho Nykänen",
-    "url": "www.github.com/nyksy",
-    "likes": 2
+      "title": "token test",
+      "author": "Juho Nykänen",
+      "url": "www.com",
+      "likes": "12",
+      "userId": "5f90698257cbed7c28ac11b5"
 }
