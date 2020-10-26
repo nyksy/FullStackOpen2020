@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 
-//Tehty 5.3 ->
+
+//Tehty 5.5 ->
 const App = () => {
+  const [loginVisible, setLoginVisible] = useState(false)
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+
+  const blogFormRef = React.createRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -55,22 +59,12 @@ const App = () => {
     }
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-      likes: 0,
-    }
-
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
-      .then(returnedBlog => {
+      .then(returnedBlog => {     
         setBlogs(blogs.concat(returnedBlog))
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
       })
   }
 
@@ -83,42 +77,35 @@ const App = () => {
     setPassword('')
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <h2>Log in to application</h2>
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
       <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
+        <h2>blogs</h2>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
       </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    )
+  }
+
+  const blogForm = () => (
+    <Togglable buttonLabel='new note' ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
   )
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
-  }
 
   if (user === null) {
     return loginForm()
@@ -131,30 +118,8 @@ const App = () => {
       <p>{user.name} logged in
       <button onClick={handleLogout}>logout</button>
       </p>
-
-      <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-        title:<input
-          name="title"
-          value={newTitle}
-          onChange={handleTitleChange}
-        />
-        </div>
-        <div>
-        author:<input
-          value={newAuthor}
-          onChange={handleAuthorChange}
-        />
-        </div>
-        <div>
-        url:<input
-          value={newUrl}
-          onChange={handleUrlChange}
-        />
-        </div>
-        <button type="submit">create</button>
-      </form>
+      {blogForm()}
+      
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
