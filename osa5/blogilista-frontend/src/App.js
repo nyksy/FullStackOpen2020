@@ -8,7 +8,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 
 
-//Tehty 5.12 ->
+//Tehty 5.13  ->
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
@@ -89,7 +89,7 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <Togglable buttonLabel='new note' ref={blogFormRef}>
+    <Togglable buttonLabel='new blog' ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
@@ -108,7 +108,7 @@ const App = () => {
       {blogForm()}
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} />
       )}
     </div>
   )
