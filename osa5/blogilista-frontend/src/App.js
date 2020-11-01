@@ -8,21 +8,21 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 
 
-//Tehty 5.13  ->
+//Tehty 5.13, lisätty tykkäys ja poistaminen, blogit myös järjestyksessä tykkäyksien mukaan
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
+  const [update, updateBlogs] = useState(null)
   const blogFormRef = React.createRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
-  }, [])
+  }, [update])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -35,7 +35,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
+  const handleLogin = async (event) => { //Kirjautuminen
     event.preventDefault()
 
     try {
@@ -58,11 +58,11 @@ const App = () => {
     }
   }
 
-  const addBlog = (blogObject) => {
+  const addBlog = (blogObject) => { //Blogin lisääminen
     blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
-      .then(returnedBlog => {     
+      .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
       })
   }
@@ -106,10 +106,12 @@ const App = () => {
       <button onClick={handleLogout}>logout</button>
       </p>
       {blogForm()}
-      
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} />
-      )}
+
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} user={user} updateBlogs={updateBlogs} />
+        )}
     </div>
   )
 }
