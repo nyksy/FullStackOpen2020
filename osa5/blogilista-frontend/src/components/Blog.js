@@ -27,17 +27,19 @@ const Blog = ({ blog, user, updateBlogs, onLikeClick }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+
   return (
-    <div style={blogStyle}>
+    <div id='blog' style={blogStyle}>
       <div style={hideWhenVisible} className='lessInfo'>
-        {blog.title} {blog.author} <button onClick={toggleVisibility}> view</button>
+        {blog.title} {blog.author} <button id='view-button' onClick={toggleVisibility}> view</button>
       </div>
       <div style={showWhenVisible} className='moreInfo'>
         {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button> <br />
         {blog.url} <br />
-        likes {blog.likes} <button onClick={() => onLikeClick(blog.id) }>like</button><br />
-        <button onClick={removeBlog}> delete</button>
+        <div id='likeElement'>
+          likes {blog.likes} <button id='like-button' onClick={() => onLikeClick(blog.id)}>like</button><br />
+        </div>
+        <button id='delete-button' onClick={removeBlog}> delete</button>
       </div>
     </div>
   )

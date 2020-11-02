@@ -7,7 +7,7 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 
-//5.17 lets go
+//5.22 kaikki testit oikein
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
@@ -113,7 +113,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div id='main'>
       <h2>blogs</h2>
       <Notification message={errorMessage} />
       <p>{user.name} logged in
