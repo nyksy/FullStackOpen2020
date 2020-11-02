@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Blogservice from '../services/blogs'
 
-const Blog = ({ blog, user, updateBlogs }) => {
+const Blog = ({ blog, user, updateBlogs, onLikeClick }) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -9,14 +9,6 @@ const Blog = ({ blog, user, updateBlogs }) => {
 
   const toggleVisibility = () => {
     setVisible(!visible)
-  }
-
-  const addLike = async event => {
-    event.preventDefault()
-    const likes = blog.likes + 1
-    const updatedBlog = { ...blog, likes } 
-    await Blogservice.update(blog.id, updatedBlog)
-    updateBlogs(Math.random())
   }
 
   const removeBlog = async event => {
@@ -35,18 +27,17 @@ const Blog = ({ blog, user, updateBlogs }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-
+  
   return (
     <div style={blogStyle}>
-      <div style={hideWhenVisible} >
-        {blog.title} {blog.author} <button onClick={toggleVisibility}>view</button>
+      <div style={hideWhenVisible} className='lessInfo'>
+        {blog.title} {blog.author} <button onClick={toggleVisibility}> view</button>
       </div>
-      <div style={showWhenVisible} >
-        {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button><br/>
-        {blog.url} <br/>
-        likes {blog.likes} <button onClick={addLike}>like</button><br/>
-        {user.name} <br/>
-        <button onClick={removeBlog}>delete</button>
+      <div style={showWhenVisible} className='moreInfo'>
+        {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button> <br />
+        {blog.url} <br />
+        likes {blog.likes} <button onClick={() => onLikeClick(blog.id) }>like</button><br />
+        <button onClick={removeBlog}> delete</button>
       </div>
     </div>
   )

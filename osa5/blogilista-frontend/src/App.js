@@ -7,8 +7,7 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 
-
-//Tehty 5.13, lisätty tykkäys ja poistaminen, blogit myös järjestyksessä tykkäyksien mukaan
+//5.17 lets go
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
@@ -58,6 +57,18 @@ const App = () => {
     }
   }
 
+  const likeABlog = async (id) => {
+    const blog = blogs.find((blog) => blog.id === id);
+
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+    }
+    const returnedBlog = await blogService.update(id, updatedBlog);
+    setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
+  }
+
+
   const addBlog = (blogObject) => { //Blogin lisääminen
     blogFormRef.current.toggleVisibility()
     blogService
@@ -77,15 +88,18 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <Togglable buttonLabel='login'>
-      <LoginForm
-        username={username}
-        password={password}
-        handleUsernameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
-        handleSubmit={handleLogin}
-      />
-    </Togglable>
+    <div>
+      <h2>blogs</h2>
+      <Togglable buttonLabel='login'>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
+      </Togglable>
+    </div>
   )
 
   const blogForm = () => (
@@ -110,7 +124,7 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} user={user} updateBlogs={updateBlogs} />
+          <Blog key={blog.id} blog={blog} user={user} updateBlogs={updateBlogs} onLikeClick={likeABlog} />
         )}
     </div>
   )

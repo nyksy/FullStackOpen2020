@@ -14,7 +14,9 @@ const getAll = () => {
 
 const create = async newObject => {
   const config = {
-    headers: { Authorization: token },
+    headers: { 
+      Authorization: token 
+    },
   }
 
   const response = await axios.post(baseUrl, newObject, config)
@@ -34,7 +36,7 @@ const remove = async (id, token) => {
     headers:
     {
       Authorization: token
-    }
+    },
   }
 
   const response = await axios.delete(`${baseUrl}/${id}`, user)

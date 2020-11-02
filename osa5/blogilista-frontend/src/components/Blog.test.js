@@ -1,7 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
-import { prettyDOM } from '@testing-library/dom'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 test('renders content', () => {
@@ -12,24 +11,76 @@ test('renders content', () => {
         likes: 0,
     }
 
+    const component = render(
+        <Blog blog={blog} />
+    )
+
+    const div = component.container.querySelector('.lessInfo')
+
+    expect(div).toHaveTextContent(
+        'This is a test'
+    )
+    expect(div).toHaveTextContent(
+        'Juho Nykänen'
+    )
+
+    expect(div).not.toHaveTextContent(
+        'www.com'
+    )
+
+    expect(div).not.toHaveTextContent(
+        '0'
+    )
+})
+
+test('renders more content when not hidden', () => {
+    const blog = {
+        title: 'This is a test',
+        author: 'Juho Nykänen',
+        url: 'www.com',
+        likes: 0,
+    }
 
     const component = render(
         <Blog blog={blog} />
     )
 
-    const li = component.container.querySelector('li')
-    console.log(prettyDOM(li))
+    const button = component.getByText('view')
+    fireEvent.click(button)
 
-    expect(component.container).toHaveTextContent(
+    const div = component.container.querySelector('.moreInfo')
+
+    expect(div).toHaveTextContent(
         'This is a test'
     )
-    expect(component.container).toHaveTextContent(
+    expect(div).toHaveTextContent(
         'Juho Nykänen'
     )
-    expect(component.container).not.toHaveTextContent(
+    expect(div).toHaveTextContent(
         'www.com'
     )
-    expect(component.container).not.toHaveTextContent(
+    expect(div).toHaveTextContent(
         '0'
     )
+})
+
+test('like-button is pressed twice', () => {
+    const blog = {
+        title: 'This is a test',
+        author: 'Juho Nykänen',
+        url: 'www.com',
+        likes: 0,
+    }
+
+    const mockHandler = jest.fn()
+
+    const component = render(
+        <Blog blog={blog} onLikeClick={mockHandler}/>
+    )
+
+    const likeButton = component.getByText('like')
+    
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+    expect(mockHandler.mock.calls).toHaveLength(2)
 })
