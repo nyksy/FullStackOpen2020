@@ -28,11 +28,27 @@ const reducer = (state = initialState, action) => {
       const anecdoteToVote = state.find(a => a.id === id)
       const changedAnecdote = {
         ...anecdoteToVote,
-          votes: anecdoteToVote.votes + 1
+        votes: anecdoteToVote.votes + 1
       }
       return state.map(a => a.id !== id ? a : changedAnecdote)
+    case 'NEW_ANECDOTE':
+      console.log(action.data.id)
+      return [...state, action.data]
     default:
       return state
+  }
+}
+const generateId = () =>
+  Number((Math.random() * 1000000).toFixed(0))
+
+export const createAnecdote = (content) => {
+  return {
+    type: 'NEW_ANECDOTE',
+    data: {
+      content,
+      id: generateId(),
+      votes: 0 
+    }
   }
 }
 
