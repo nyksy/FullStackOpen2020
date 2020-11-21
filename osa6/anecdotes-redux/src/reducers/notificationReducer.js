@@ -1,4 +1,4 @@
-const notificationReducer = (state = [], action) => {
+const notificationReducer = (state = '', action) => {
     console.log('state now: ', state)
     console.log('action', action)
 
@@ -12,13 +12,20 @@ const notificationReducer = (state = [], action) => {
     }
 }
 
-export const setNotification = (content) => {
+export const setNotification = (content, time) => {
     console.log('CONTENT:', content)
-    return {
-        type: 'SET_NOTIFICATION',
-        data: content
+    console.log('TIME:', time)
+    return async dispatch => {
+        dispatch({
+            type: 'SET_NOTIFICATION',
+            data: content
+        })
+        setTimeout(() => {
+            dispatch({
+                type: 'DELETE'
+            })
+        }, time * 1000);
     }
-
 }
 
 export default notificationReducer

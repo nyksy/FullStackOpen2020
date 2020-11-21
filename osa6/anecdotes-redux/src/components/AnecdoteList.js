@@ -8,11 +8,8 @@ const AnecdoteList = () => {
     const anecdotes = useSelector(state => state.anecdotes)
     
     const addVote = async (anecdote) => {
-        dispatch(addVoteTo(anecdote))
-        dispatch(setNotification(`You voted for '${anecdote.content}'`))
-        setTimeout(() => {
-            dispatch(setNotification(''))
-        }, 5 * 1000);
+        await dispatch(addVoteTo(anecdote))
+        dispatch(setNotification(`You voted for '${anecdote.content}'`, 5))
     }
 
     return (

@@ -10,11 +10,8 @@ const NewAnecdote = () => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
-        dispatch(createAnecdote(content))
-        dispatch(setNotification(`You added '${content}'`))
-        setTimeout(() => {
-            dispatch(setNotification(''))
-        }, 5 * 1000);
+        await dispatch(createAnecdote(content))
+        dispatch(setNotification(`You added '${content}'`, 5))
     }
 
     return (
