@@ -5,7 +5,7 @@ import Notification from './components/Notification'
 import { initialize } from './reducers/anecdoteReducer'
 import { useDispatch } from 'react-redux'
 
-//Tehty 6.16
+//Tehty 6.17
 const App = () => {
   const dispatch = useDispatch()
 

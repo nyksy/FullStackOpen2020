@@ -6,8 +6,9 @@ import { setNotification } from '../reducers/notificationReducer'
 const AnecdoteList = () => {
     const dispatch = useDispatch()
     const anecdotes = useSelector(state => state.anecdotes)
-    const addVote = (anecdote) => {
-        dispatch(addVoteTo(anecdote.id))
+    
+    const addVote = async (anecdote) => {
+        dispatch(addVoteTo(anecdote))
         dispatch(setNotification(`You voted for '${anecdote.content}'`))
         setTimeout(() => {
             dispatch(setNotification(''))
