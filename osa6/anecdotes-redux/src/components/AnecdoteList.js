@@ -15,7 +15,7 @@ const AnecdoteList = () => {
     }
 
     return (
-        <ul>
+        <div>
             {anecdotes.map(anecdote =>
                 <div key={anecdote.id}>
                     <div>
@@ -27,7 +27,7 @@ const AnecdoteList = () => {
                     </div>
                 </div>
             )}
-        </ul>
+        </div>
     )
 }
 

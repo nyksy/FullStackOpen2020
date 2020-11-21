@@ -12,7 +12,7 @@ const notificationReducer = (state = [], action) => {
     }
 }
 
-export const setNotification = (content, duration) => {
+export const setNotification = (content) => {
     console.log('CONTENT:', content)
     return {
         type: 'SET_NOTIFICATION',
