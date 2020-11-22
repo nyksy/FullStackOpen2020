@@ -9,6 +9,7 @@ const Statistics = ({ good, neutral, bad }) => {
 
   if (good + neutral + bad === 0) return (<div><p>No feedback given </p></div>)
   
+  //Taulukko
   return (
     <table>
       <tbody>
@@ -23,6 +24,7 @@ const Statistics = ({ good, neutral, bad }) => {
   )
 }
 
+//taulukon rivit
 const StatisticLine = ({ text, value }) => <tr><td>{text}</td><td>{value}</td></tr>
 
 const App = () => {
