@@ -1,26 +1,35 @@
 import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 
-const Menu = () => {
-  const padding = {
-    paddingRight: 5
-  }
-  return (
-    <div>
-      <a href='#' style={padding}>anecdotes</a>
-      <a href='#' style={padding}>create new</a>
-      <a href='#' style={padding}>about</a>
-    </div>
-  )
-}
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+} from "react-router-dom"
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote =>
+        <li key={anecdote.id} >
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>)}
     </ul>
   </div>
 )
+
+const Anecdote = ({ anecdote }) => {
+  return (
+    <div>
+      <h2>{anecdote.content} by {anecdote.author}</h2>
+      <div>has {anecdote.votes} votes</div>
+      <div>For more info see {anecdote.info}</div>
+    </div>
+  )
+}
 
 const About = () => (
   <div>
@@ -28,8 +37,8 @@ const About = () => (
     <p>According to Wikipedia:</p>
 
     <em>An anecdote is a brief, revealing account of an individual person or an incident.
-      Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
-      such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
+    Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
+    such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
       An anecdote is "a story with a point."</em>
 
     <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
@@ -74,7 +83,7 @@ const CreateNew = (props) => {
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
         </div>
         <button>create</button>
       </form>
@@ -83,6 +92,7 @@ const CreateNew = (props) => {
 
 }
 
+//TODO 7.2
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -101,11 +111,16 @@ const App = () => {
     }
   ])
 
+
   const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+  }
+
+  const padding = {
+    paddingRight: 5
   }
 
   const anecdoteById = (id) =>
@@ -125,10 +140,30 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
+      <div>
+        <div>
+          <Link style={padding} to="/anecdotes">anecdotes</Link>
+          <Link style={padding} to="/create">create new</Link>
+          <Link style={padding} to="/about">about</Link>
+        </div>
+        <Switch>
+          <Route path="/anecdotes/:id">
+            <Anecdote anecdotes={anecdotes} />
+          </Route>
+          <Route path="/anecdotes">
+            <AnecdoteList anecdotes={anecdotes} />
+          </Route>
+          <Route path="/create">
+            <CreateNew addNew={addNew} />
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/">
+            <AnecdoteList anecdotes={anecdotes} />
+          </Route>
+        </Switch>
+      </div>
       <Footer />
     </div>
   )
