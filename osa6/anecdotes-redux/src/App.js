@@ -5,7 +5,7 @@ import Notification from './components/Notification'
 import { initialize } from './reducers/anecdoteReducer'
 import { useDispatch } from 'react-redux'
 
-//Tehty 6.20
+//Tehty 6.21, viimeisin notifikaatio aina n aikaa näkyvillä
 const App = () => {
   const dispatch = useDispatch()
 
